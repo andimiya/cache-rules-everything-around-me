@@ -5,7 +5,7 @@ const redis = require('redis');
 const { slow } = require('./routes');
 
 const app = express();
-const cache = require('express-redis-cache')({ host: "127.0.0.1", port: "6379" });
+const cache = require('express-redis-cache')({ host: "127.0.0.1", port: "6379", expire:10 });
 
 const PORT = 8080;
 
@@ -14,7 +14,7 @@ app.set('view engine', '.hbs');
 
 app.use(bodyParser.json());
 
-app.use('/slow', cache.route({ expire:30 }), slow);
+app.use('/slow', cache.route(), slow);
 
 app.get('/', (req, res) => {
   res.render('index');

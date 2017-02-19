@@ -1,7 +1,6 @@
 const express = require('express');
 const redis = require('redis');
 const sleep = require('../services/sleep');
-// const cache = require('express-redis-cache')({ host: "127.0.0.1", port: "6379" });
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
