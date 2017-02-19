@@ -3,21 +3,31 @@ const express = require('express');
 const redis = require('redis');
 const sleep = require('../services/sleep');
 const client = redis.createClient(); //creates a new client
+const cache = require('express-redis-cache');
 
 const router = express.Router();
 
-router.route('/')
-  .get((req, res, next) => {
-    client.exists('key', function(err, reply) {
+router.get('/', (req, res, next) => {
+    client.exists('things', function(err, reply) {
       if (reply === 1) {
-        console.log('exists');
+        res.render('api/index');
       } else {
-          client.set(['key', 'test']);
+          client.set(['things', `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CREAM GET DA MONEY $$ Bills Y'all</title>
+</head>
+<body>
+  {{{ body }}}
+</body>
+</html>`]);
           return sleep(5000)
           .then(_ => res.render('api/index', (err, html) => {
-          console.log('else');
+          // console.log('else');
         res.send(html);
-      }));    }
+      }));
+       }
     });
   });
 

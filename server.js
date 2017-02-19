@@ -15,7 +15,7 @@ app.engine('.hbs', handlebars({extname: '.hbs', defaultLayout: 'main'}));
 app.set('view engine', '.hbs');
 
 app.use(bodyParser.json());
-// server.use(creamCache.init()); /* student implements this */
+
 app.use('/slow', slow);
 
 app.get('/', (req, res) => {
