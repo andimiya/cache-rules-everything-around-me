@@ -13,8 +13,10 @@ app.engine('.hbs', handlebars({extname: '.hbs', defaultLayout: 'main'}));
 app.set('view engine', '.hbs');
 
 app.use(bodyParser.json());
+app.use(cache.route());
 
-app.use('/slow', cache.route(), slow);
+app.use('/slow', slow);
+
 
 app.get('/', (req, res) => {
   res.render('index');
