@@ -5,6 +5,10 @@ const handlebars = require('express-handlebars');
 const { slow } = require('./routes');
 
 const app = express();
+const cache = require('express-redis-cache');
+var client1 = cache({ host: "127.0.0.1", port: "6379" });
+
+
 const PORT = 8080;
 
 app.engine('.hbs', handlebars({extname: '.hbs', defaultLayout: 'main'}));
