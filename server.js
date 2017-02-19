@@ -1,13 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const handlebars = require('express-handlebars');
-
+const redis = require('redis');
 const { slow } = require('./routes');
 
 const app = express();
-const cache = require('express-redis-cache');
-const client1 = cache({ host: "127.0.0.1", port: "6379" });
-
+const cache = require('express-redis-cache')({ host: "127.0.0.1", port: "6379" });
 
 const PORT = 8080;
 
@@ -16,12 +14,11 @@ app.set('view engine', '.hbs');
 
 app.use(bodyParser.json());
 
-app.use('/slow', slow);
+app.use('/slow', cache.route({ expire:30 }), slow);
 
 app.get('/', (req, res) => {
   res.render('index');
 });
-
 
 app.listen(PORT, () => {
   process.stdout.write(`server listening on port ${PORT}`);
