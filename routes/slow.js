@@ -7,12 +7,23 @@ const cache = require('express-redis-cache');
 
 const router = express.Router();
 
+function cacheMiddleware (key, value) {
+  client.set([key, value])
+}
+
+function checkMiddleware(key) {
+  client.get(key, (err, reply) => {
+    console.log(reply)
+    return reply;
+  })
+}
+
 router.get('/', (req, res, next) => {
     client.exists('page', function(err, reply) {
       if (reply === 1) {
         res.render('api/index');
       } else {
-          client.set(['page', `<!DOCTYPE html>
+          cacheMiddleware('page', `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -21,7 +32,7 @@ router.get('/', (req, res, next) => {
 <body>
   {{{ body }}}
 </body>
-</html>`]);
+</html>`);
           return sleep(5000)
           .then(_ => res.render('api/index', (err, html) => {
           // console.log('else');
